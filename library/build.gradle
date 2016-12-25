@@ -1,0 +1,42 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion rootProject.ext.compileSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    provided "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+}
+
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+publish {
+    bintrayUser = properties.getProperty('bintray.user')
+    bintrayKey = properties.getProperty('bintray.key')
+    dryRun = false
+    repoName = 'android'
+    userOrg = 'emerap'
+    groupId = 'com.github.emerap'
+    artifactId = 'route-builder'
+    publishVersion = rootProject.ext.versionName
+    licences = ['MIT']
+    desc = 'Helper for work with android fragments for build navigation'
+    website = 'https://github.com/emerap/RouteBuilder'
+}
